@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="script.js"></script>
+    <title>Simple Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <style>
+        body {
+            text-align: center;
+
+        }
+
+        button {
+            width: 250px;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            display: flex;
+            justify-content: center;
+            margin: 10%;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar bg-light">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">
+                Simple Calculator
+            </span>
+        </div>
+    </nav>
+
+    <div class="card">
+        <br>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="num1" placeholder="Number 1" name="num1">
+                        <label for="num1">Number 1</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="number" class="form-control" id="num2" placeholder="Number 2" name="num2">
+                        <label for="num2">Number 2</label>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+            <br>
+            <button onclick="fetchAnswer('+')" class="btn btn-outline-primary"> + </button>
+            <button onclick="fetchAnswer('-')" class="btn btn-outline-primary"> - </button>
+            <button onclick="fetchAnswer('*')" class="btn btn-outline-primary"> * </button>
+            <button onclick="fetchAnswer('/')" class="btn btn-outline-primary"> / </button>
+
+
+            <br>
+            <br>
+
+
+            <button onclick="clearScreen()" class="btn btn-primary"> Clear </button>
+
+            <br><br>
+            <h2 id="result"></h2>
+
+        </div>
+
+    </div>
+
+</body>
+
+<script>
+
+    function fetchAnswer(operand) {
+        const num1 = parseInt(document.getElementById("num1").value);
+        const num2 = parseInt(document.getElementById("num2").value);
+        let chosenRoute = ""
+        if (operand === '+') {
+            chosenRoute = 'add'
+        }
+        else if (operand === '-') {
+            chosenRoute = 'min'
+        }
+        else if (operand === '*') {
+            chosenRoute = 'times'
+        }
+        else if (operand === '/') {
+            chosenRoute = 'divide'
+        }
+        fetch(`http://localhost:3000/calculator/${chosenRoute}?num1=${num1}&num2=${num2}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerHTML = `${num1} ${chosenRoute} ${num2} equals ${data.result}`
+                console.log(data)
+            })
+    }
+
+    function clearScreen() {
+        document.querySelector("#num1").value = "";
+        document.querySelector("#num2").value = "";
+        document.getElementById("result").innerHTML = "";
+    }
+</script>
+
+
+
+</html>
